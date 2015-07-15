@@ -14,8 +14,8 @@ namespace RawDataDownloader
     {
         static void Main(string[] args)
         {
-            //new MixpanalDataImporter().DoMixpanalDataImporter();
-            new MongoImportExport().LoadFromFiles();
+            new MixpanalDataImporter().DoMixpanalDataImporter();
+            //new MongoImportExport().LoadFromFiles();
 
             Console.WriteLine("Done");
             Console.ReadKey();

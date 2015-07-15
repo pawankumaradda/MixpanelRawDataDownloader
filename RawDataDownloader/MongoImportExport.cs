@@ -9,6 +9,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.IO;
 using System.IO;
 using System.Diagnostics;
+using System.Configuration;
 
 namespace RawDataDownloader
 {
@@ -26,7 +27,7 @@ namespace RawDataDownloader
         {
             get
             {
-                return MongoConnection.GetDatabase("Mixpanel");
+                return MongoConnection.GetDatabase(ConfigurationManager.AppSettings["MongoDbName"]);
             }
         }
 
@@ -34,7 +35,7 @@ namespace RawDataDownloader
         {
             get
             {
-                return GetDb.GetCollection<BsonDocument>("Events");
+                return GetDb.GetCollection<BsonDocument>(ConfigurationManager.AppSettings["MongoTableName"]);
             }
         }
 
@@ -43,33 +44,17 @@ namespace RawDataDownloader
 
         public void LoadFromFiles()
         {
-            string Command = " --db Mixpanel --collection Events --file \"{0}\"";
-            string path = @"C:\Program Files\MongoDB\Server\3.0\bin\mongoimport.exe";
+            string Command = " --db {0} --collection {1} --file \"{2}\"";
+            string path = ConfigurationManager.AppSettings["MongoImportexeLocation"]; 
             DirectoryInfo Archive = new DirectoryInfo("Archive");
             DirectoryInfo dir = new DirectoryInfo("Dump");
+            DirectoryInfo test = new DirectoryInfo("Test");
             int counter = 0;
             foreach (var item in Archive.GetFiles())
             {
                 counter = 0;
-                //using (var streamReader = new StreamReader(item.FullName))
-                //{
-
-                //    string line;
-                    
-
-                //    while ((line = streamReader.ReadLine()) != null)
-                //    {
-                //        line = line.Replace("$", "");
-                //        BsonDocument bs = BsonDocument.Parse(line);
-                //        collection.BulkWriteAsync()
-                //        counter++;
-                        
-
-                //    }
-
-                //}
-                ExecuteCommandSync(String.Format(Command, item.FullName),path);
-                //item.MoveTo(Archive.ToString()+ "\\" + item.Name);
+                ExecuteCommandSync(String.Format(Command, ConfigurationManager.AppSettings["MongoDbName"],ConfigurationManager.AppSettings["MongoTableName"],item.FullName),path);
+                item.MoveTo(Archive.ToString()+ "\\" + item.Name);
 
                 Console.WriteLine("File {0} : {1}",item.Name, counter);
             }

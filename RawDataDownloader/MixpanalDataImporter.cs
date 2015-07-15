@@ -7,29 +7,36 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Configuration;
 
 namespace RawDataDownloader
 {
     class MixpanalDataImporter
     {
 
-        String Api_secret = "4d9d15b5e0449fbd52538f70acee47e9";
-        String Api_key = "101942df3a45351d8d4a5d25aa7e61d6";
-        DateTime From_date = new DateTime(2015, 06, 29, 00, 00, 00);
-        DateTime To_date;
+        string Api_secret = ConfigurationManager.AppSettings["MixpanelAPISecret"];
+        string Api_key = ConfigurationManager.AppSettings["MixpanelAPIKey"];
+        DateTime From_date = DateTime.Parse(ConfigurationManager.AppSettings["StartDate"]);
 
+        DateTime Temp_date, End_date;
 
         public void DoMixpanalDataImporter()
         {
             Console.WriteLine("Calling web call");
-
+            string end_date_string = ConfigurationManager.AppSettings["EndDate"];
+            if (!string.IsNullOrEmpty(end_date_string))
+                End_date = DateTime.Parse(ConfigurationManager.AppSettings["EndDate"]);
+            else
+                End_date = DateTime.Today;
+                
             double expire = DateTimeToUnixTimestamp(DateTime.Today.AddDays(1));
-            while (From_date < DateTime.Today)
+            
+            while (From_date < End_date)
             {
-                To_date = From_date.AddDays(1);
+                Temp_date = From_date.AddDays(1);
                 Console.WriteLine(From_date.ToString());
-                WebCall(Api_secret, Api_key, From_date.ToString("yyyy-MM-dd"), To_date.ToString("yyyy-MM-dd"), expire);
-                From_date = To_date;
+                WebCall(Api_secret, Api_key, From_date.ToString("yyyy-MM-dd"), Temp_date.ToString("yyyy-MM-dd"), expire);
+                From_date = Temp_date;
 
             }
 
