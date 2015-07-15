@@ -1,0 +1,36 @@
+db.createCollection("Events",{autoIndexId:true})
+
+
+
+db.Events.insert(
+{
+  "event": "Tickets.ViewTicketsList",
+  "properties": {
+    "time": 1429137554,
+    "distinct_id": "1000007",
+    "$browser": "Chrome",
+    "city": "Vancouver",
+    "email": "support@mybazinga.com",
+    "first_name": "bazinga!",
+    "initial_referrer": "$direct",
+    "initial_referring_domain": "$direct",
+    "last_name": "Support",
+    "lib_version": "2.4.2",
+    "name": "bazinga! Support",
+    "os": "Windows",
+    "region": "British Columbia",
+    "screen_height": 1080,
+    "screen_width": 1920,
+    "Client": "Web",
+    "DevelopmentID": "315719193923817472",
+    "DevelopmentName": "bazinga! Test 2",
+    "Email": "support@mybazinga.com",
+    "Name": "bazinga! Support",
+    "UserID": "1000007",
+    "UserRole": "Staff/Caretaker",
+    "id": "1000007",
+    "mp_country_code": "CA",
+    "mp_lib": "web"
+  }
+  }
+)
